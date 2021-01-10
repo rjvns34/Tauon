@@ -1,0 +1,71 @@
+<!-- <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+        <input type="text" placeholder="Username" matInput formControlName="username">
+    </mat-form-field>
+    <div *ngIf="submitted && f.username.errors" style="color: red; margin-left: 40px;" role="alert">
+     <div *ngIf="f.username.errors.required">Username is required</div>
+     </div>
+     
+     <mat-form-field color="#ff0000">
+         <input type="password" matInput placeholder="Password" formControlName="password"/>
+       </mat-form-field>
+       <div *ngIf="submitted && f.password.errors" style="color: red; margin-left: 40px;">
+         <div *ngIf="f.password.errors.required">Password is required</div>
+     </div>
+ 
+ <button mat-button>Submit</button>
+ </form> -->
+
+ <div class="background"></div>
+<div class="container">
+  <div class="container">
+    <div class="row">
+    </div>
+   <div class="row">
+     <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+       <div class="card">
+        <div class="card-header">
+            <!-- <h4>Tauon Solution</h4> -->
+            
+            <img src="../../../../assets/img/flexa-Logo.png" 
+            alt="Flexa Home Automation"
+            style="width: 200px;">
+           <!-- <div class="social-btns">
+             <button mat-icon-button><i class="fa fa-facebook-square"></i></button>
+             <button mat-icon-button><i class="fa fa-twitter"></i></button>
+             <button mat-icon-button><i class="fa fa-google-plus"></i></button>
+           </div> -->
+         </div>
+         <p class="tip">Tauon Solution</p>
+         <div class="card-form">
+            <h4 *ngIf="loading" style="text-align: center; color: red;" role="alert">{{message}}</h4>
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+              <i class="material-icons">email</i>
+              <mat-form-field color="#ff0000">
+                <input type="text" matInput placeholder="Email address" formControlName="username"/>
+              </mat-form-field>
+            </div>
+            <div *ngIf="submitted && f.username.errors" class="" style="color: red; margin-left: 40px;" role="alert">
+                <div *ngIf="f.username.errors.required">Username is required</div>
+            </div>
+            <div class="form-row">
+              <i class="material-icons">lock_outline</i>
+              <mat-form-field color="#ff0000">
+                <input type="password" matInput placeholder="Password" formControlName="password"/>
+              </mat-form-field>
+            </div>
+            <div *ngIf="submitted && f.password.errors" class="" style="color: red; margin-left: 40px;">
+              <div *ngIf="f.password.errors.required">Password is required</div>
+          </div>
+            <div class="card-footer">
+              <button mat-button>SIGN IN</button>
+            </div>
+          </form>
+          </div>
+       </div>
+     </div>
+   </div>
+  </div>
+</div>
+ 

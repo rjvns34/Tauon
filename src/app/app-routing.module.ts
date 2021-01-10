@@ -1,7 +1,22 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { HomeComponent } from './dashboard/home/home.component';
+import { RootComponent } from './dashboard/root/root.component';
+import { AuthGuard } from './helpers/auth.guard';
+import { LoginComponent } from './modules/user/login/login.component';
+import { UsersDataComponent } from './modules/user/users-data/users-data.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  // {path:'',component:LoginComponent,children:[
+  //   // {path:'dashboard',component:RootComponent}
+  // ]}
+  {path:'',component: LoginComponent},
+  {path:'dashboard',component:RootComponent,canActivate:[AuthGuard], children:[
+    {path:'', component: HomeComponent},
+    {path:'userInfo', component: UsersDataComponent},
+    // {path:'setting', component: SettingsComponent}
+  ]}
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
