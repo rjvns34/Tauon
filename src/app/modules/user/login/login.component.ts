@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
             this.alertService.error(this.message,true)
           }
 
-          // console.log(data.role);
+          console.log(data.role);
       },
       error => {
         this.loading = false;

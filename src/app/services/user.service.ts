@@ -21,19 +21,26 @@ export class UserService {
 
   addUser(user: User){
     const headers = {'Authorization':RequiredData.authorization}
-    return this.http.post<any>(RequiredData.baseUrl+'add/user',[user],{headers})
+    return this.http.post(RequiredData.baseUrl+'add/user/',[user],{headers})
     .pipe(map(data => {
       console.log("data @ user service" +data);  
     }))
   }
 
   updateUser(user: User){
-    console.log(user.userId);
-    
     const headers = {'Authorization':RequiredData.authorization}
     const updateUrl =RequiredData.baseUrl+'update/user/'+user.userId
-    return this.http.put<any>(updateUrl, user, {headers}).pipe(map(data => {
+    return this.http.put(updateUrl, user, {headers}).pipe(map(data => {
       console.log("Update");
     }))
+  }
+
+  deleteUser(userId){
+    const headers = {'Authorization':RequiredData.authorization}
+    return this.http.delete(RequiredData.baseUrl+'delete/user/'+userId,{headers}).pipe(map(data => {
+      console.log('delete');
+      
+    }))
+    
   }
 }

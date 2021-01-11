@@ -24,6 +24,7 @@
                                 <th>Username</th>
                                 <th>Role</th>
                                 <th>Action</th>
+                                <th>Installation</th>
                             </tr>
                         </thead>
                         
@@ -36,10 +37,17 @@
                                 <td>{{data.email}}</td>
                                 <td>{{data.username}}</td>
                                 <td class="text-primary">{{data.role}}</td>
-                                <td><button mat-icon-button data-toggle="modal" data-target="#formModal"><i class="material-icons" (click)="getUserInfo(data)">edit</i></button></td>
+                                <!-- <td><button mat-icon-button data-toggle="modal" data-target="#formModal"><i class="material-icons" (click)="getUserInfo(data)">edit</i></button></td> -->
+                                <td><button mat-icon-button><i class="material-icons icon-btn" [matMenuTriggerFor]="userMenu" >edit</i></button></td>
+                                <td style="text-align: center;"><button mat-icon-button ><i class="material-icons icon-btn">add_circle</i></button></td>
+                                <mat-menu #userMenu="matMenu">
+                                    <button mat-menu-item data-toggle="modal" data-target="#formModal" (click)="getUserInfo(data)">Update</button>
+                                    <button mat-menu-item (click)="deleteUser(data)" >Delete</button>
+                                </mat-menu>
                               </tr>
                         </tbody>
                     </table>
+                    
                     <div>
                         <pagination-controls id="listing_pagination" maxSize="5" directionLinks="true" (pageChange)="page = $event" style="text-align: end;"></pagination-controls>
                     </div>
@@ -65,7 +73,7 @@
                                </mat-form-field>
 
                                <div id="userId">
-                                <mat-form-field color="accent" >
+                                <mat-form-field>
                                   <input matInput type="text" placeholder="userId" formControlName="userId" value="{{userId}}">
                                 </mat-form-field>
                               </div>
@@ -77,16 +85,16 @@
                                 </mat-form-field>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-4" id="uNameDiv">
                                 <mat-form-field>
-                                    <input matInput type="text" placeholder="Username" formControlName="username" value="{{uName}}">
+                                    <input  matInput type="text" placeholder="Username" formControlName="username" value="{{uName}}">
                                 </mat-form-field>
                             </div>
                             
                         </div>
 
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-4" id="emailDiv">
                                 <mat-form-field>
                                     <input matInput type="text" placeholder="Email Id" formControlName="email" value="{{emailId}}">
                                 </mat-form-field>
@@ -109,7 +117,7 @@
                                     <input matInput type="text" placeholder="Address" formControlName="address" value="{{addr}}">
                                 </mat-form-field>
                             </div>
-                            <div class="col-md-6" >
+                            <div class="col-md-6" id="roleDiv">
                                 <mat-form-field style="width: 100%;">
                                     <mat-label>Role</mat-label>
                                     <select matNativeControl formControlName="role" value="{{role}}">
