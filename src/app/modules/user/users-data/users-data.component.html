@@ -32,29 +32,20 @@
                             <tr *ngFor="let data of userData | paginate:{id:'listing_pagination',
                             itemsPerPage: 10,currentPage : page,
                             totalRecords : totalRecords} | filter:searchUser">
-                            <!-- <td> <section>
-                                    <mat-checkbox [checked]="checked" (change)="toggle($event)"></mat-checkbox>
-                                 </section> </td> -->
-                                <td><mat-checkbox (change)="getUserInfo(data)"></mat-checkbox></td>
-                                <!-- [disabled]="true" -->
+                            <td><mat-checkbox ngModel (ngModelChange)="onCheckboxChange($event,data.userId)"></mat-checkbox></td>
                                 <td>{{data.firstname}}</td>
                                 <td>{{data.email}}</td>
                                 <td>{{data.username}}</td>
                                 <td class="text-primary">{{data.role}}</td>
-                                <!-- <td><button mat-icon-button data-toggle="modal" data-target="#formModal"><i class="material-icons" (click)="getUserInfo(data)">edit</i></button></td> -->
                                 <td><button mat-icon-button><i class="material-icons icon-btn" [matMenuTriggerFor]="userMenu" >edit</i></button></td>
-                                <!-- <td style="text-align: center;"><button mat-icon-button ><i class="material-icons icon-btn">add_circle</i></button></td> -->
                                 <mat-menu #userMenu="matMenu">
-                                    <button mat-menu-item data-toggle="modal" data-target="#macIdModel"  >Add Installation</button>
-                                    <button mat-menu-item data-toggle="modal" data-target="#installationForm"  >Installation from</button>
                                     <button mat-menu-item data-toggle="modal" data-target="#formModal" (click)="getUserInfo(data)">Update</button>
                                     <button mat-menu-item (click)="deleteUser(data)" >Delete</button>
-                                    
                                 </mat-menu>
                               </tr>
                         </tbody>
-                        <div class="row">
-                            <button mat-icon-button id="myBtn" color="#006598"><i class="material-icons icon-btn">add_circle</i>New Installation</button>
+                        <div class="row" id="bottomBtnDiv">
+                            <button mat-icon-button id="myBtn" color="#006598" data-toggle="modal" data-target="#macIdModel" ><i class="material-icons icon-btn">add_circle</i>New Installation</button>
                             <!-- <button mat-icon-button id="myBtn" color="#006598"><i class="material-icons icon-btn">remove_circle</i>Deactivate User</button> -->
                         </div>
                             
@@ -194,7 +185,13 @@
                 <form [formGroup]="installationForm" (ngSubmit)="installationFormSubmit(installationForm.value)">
                 <div class="modal-body">
                     <!-- <p *ngFor="let id of endPointId">{{id.endpointId}} </p> -->
-                    <p>{{masterId}}</p>
+                    <!-- <p>{{masterId}}</p> -->
+                    <mat-form-field style="width: 100%;">
+                        <input matInput formControlName="userId" value="{{uId}}">
+                    </mat-form-field>
+                    <mat-form-field style="width: 100%;">
+                        <input matInput formControlName="masterId" value="{{masterId}}">
+                    </mat-form-field>
                     <!-- <p *ngIf="endPointId!=undefined && endPointId!=null" >{{endPointId[1].endpointId}} </p> -->
                     <!-- <input type="text" *ngIf="endPointId!=undefined && endPointId!=null" value="{{endPointId[1].endpointId}}" > -->
 
@@ -220,7 +217,7 @@
                                     <option value="" disabled selected></option>
                                     <option value="Switch">Switch</option>
                                     <option value="Dimmer">Dimmer</option>
-                                    <option value="Dissable">Dissable</option>
+                                    <option value="Disable">Disable</option>
                                 </select>
                             </mat-form-field>
                         </div>
@@ -243,7 +240,7 @@
                                     <option value="" disabled selected></option>
                                     <option value="Switch">Switch</option>
                                     <option value="Dimmer">Dimmer</option>
-                                    <option value="Dissable">Dissable</option>
+                                    <option value="Disable">Disable</option>
                                 </select>
                             </mat-form-field>
                         </div>
@@ -252,7 +249,7 @@
 
                     <div class="row">
                         <mat-form-field style="width: 100%;">
-                            <input matInput placeholder="End-Point Id 3" formControlName="endPointId2" value="{{endPointId3}}">
+                            <input matInput placeholder="End-Point Id 3" formControlName="endPointId3" value="{{endPointId3}}">
                         </mat-form-field>
                         <div class="col-md-6">
                             <mat-form-field style="width: 100%;">
@@ -266,7 +263,7 @@
                                     <option value="" disabled selected></option>
                                     <option value="Switch">Switch</option>
                                     <option value="Dimmer">Dimmer</option>
-                                    <option value="Dissable">Dissable</option>
+                                    <option value="Disable">Disable</option>
                                 </select>
                             </mat-form-field>
                         </div>
@@ -289,7 +286,7 @@
                                     <option value="" disabled selected></option>
                                     <option value="Switch">Switch</option>
                                     <option value="Dimmer">Dimmer</option>
-                                    <option value="Dissable">Dissable</option>
+                                    <option value="Disable">Disable</option>
                                 </select>
                             </mat-form-field>
                         </div>

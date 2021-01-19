@@ -41,11 +41,22 @@ export class NodeService {
   }
 
   submitInstallationInfo(data){
-    console.log("data @ service "+data.endPointId);
+    
     
     const headers = {'Authorization':RequiredData.authorization}
-    const body = { "userid": [data] }
-    return this.http.post(RequiredData.baseUrl+'get/master/array/macid/',body,{headers})
+    const body = { "userid": data.userId, "masternodeId": data.masterId, "ssid": "Tauon",
+                   "ipAddress": "192.168.1.135", "installationTitle": data.installationName, "installationIcon": 60223,
+                   "roomTitle": data.roomName, "roomIcon": 60227, 
+                   "endpoints": [
+                     {"endpointId": data.endPointId1, "endpointTitle": data.endPoint1, "endpointIcon": 58162, "endpointType": data.type1, "endpointStatus": 0},
+                     {"endpointId": data.endPointId2, "endpointTitle": data.endPoint2, "endpointIcon": 58162, "endpointType": data.type2, "endpointStatus": 0},
+                     {"endpointId": data.endPointId3, "endpointTitle": data.endPoint3, "endpointIcon": 58162, "endpointType": data.type2, "endpointStatus": 0},
+                     {"endpointId": data.endPointId4, "endpointTitle": data.endPoint4, "endpointIcon": 58162, "endpointType": data.type2, "endpointStatus": 0}
+                   ] }
+                   
+      console.log("data @ service "+body);
+                   
+    return this.http.post(RequiredData.baseUrl+'add/Installation/room/endpoints/',[body],{headers})
     .pipe(map(response => {
       console.log(response);
       

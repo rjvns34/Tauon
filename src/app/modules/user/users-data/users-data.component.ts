@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { from } from 'rxjs';
 import { Node } from '../../../models/node';
 import { NodeService } from 'src/app/services/node.service';
+declare var $: any;
 
 @Component({
   selector: 'app-users-data',
@@ -57,10 +58,10 @@ export class UsersDataComponent implements OnInit {
               private alertService: AlertService) { }
 
   ngOnInit(): void {
-    // this.getEndpoingId("MS_b48b3634-fd49-43d2-a7a2-cfa27efd1520");
-
+  
     this.loadAllUsers();
     document.getElementById('userId').style.display="block";
+    document.getElementById('bottomBtnDiv').style.display="none";
 
     this.userForm = this.formBuilder.group({
       firstname :['', Validators.required,Validators.minLength(2)],
@@ -79,17 +80,18 @@ export class UsersDataComponent implements OnInit {
     })
 
     this.installationForm = this.formBuilder.group({
-      endpointId:[''],
+      masterId:[], userId:[],
       installationName: ['', Validators.required],
       roomName: ['', Validators.required],
-      endPointId1:['',Validators.required], endPoint1:['',Validators.required],
-      type1:['', Validators.required],
-      endPointId2:['',Validators.required], endPoint2:['',Validators.required],
-      type2:['', Validators.required],
-      endPointId3:['',Validators.required], endPoint3:['',Validators.required],
-      type3:['', Validators.required],
-      endPointId4:['',Validators.required], endPoint4:['',Validators.required],
-      type4:['', Validators.required]
+      
+      endPointId1:[], endPoint1:['',Validators.required], type1:['', Validators.required],
+      
+      endPointId2:[], endPoint2:['',Validators.required], type2:['', Validators.required],
+      
+      endPointId3:[], endPoint3:['',Validators.required], type3:['', Validators.required],
+      
+      endPointId4:[], endPoint4:['',Validators.required], type4:['', Validators.required],
+    
     })
 
   }
@@ -174,10 +176,11 @@ export class UsersDataComponent implements OnInit {
         console.log(data);
         // this.alertService.success('User updated successfull', true)
         Swal.fire('User Update!', 'Successfull', 'success');
+        $("#formModal").modal('hide');
         this.loadAllUsers();
-        setTimeout(() => {
-          this.alertService.clear();
-        }, 2000);
+        // setTimeout(() => {
+        //   // this.alertService.clear();
+        // }, 2000);
 
       },
       error =>{
@@ -197,6 +200,7 @@ export class UsersDataComponent implements OnInit {
         this.userService.deleteUser(data.userId).pipe(first()).subscribe(() => {
           this.loadAllUsers();
           alert("User deleted");
+          
         });
       }
   }
@@ -228,10 +232,8 @@ export class UsersDataComponent implements OnInit {
           this.endPointId2 = endPointId["result"][1]["endpointId"]
           this.endPointId3 = endPointId["result"][2]["endpointId"]
           this.endPointId4 = endPointId["result"][3]["endpointId"]
-          // console.log(endPointId["result"][0]["endpointId"]);
-          // console.log(endPointId["result"][1]["endpointId"]);
-          // console.log(endPointId["result"][2]["endpointId"]);
-          // console.log(endPointId["result"][3]["endpointId"]);
+          // this.macIdForm.reset();
+          $("#installationForm").modal('show');
         })
       }
     },error => {
@@ -241,6 +243,7 @@ export class UsersDataComponent implements OnInit {
 
   installationFormSubmit(data){
     this.submitted =true;
+    console.log(data);
     
     if(this.installationForm.invalid){
       return
@@ -258,4 +261,28 @@ export class UsersDataComponent implements OnInit {
     })
   }
 
+  count = 0;
+  uId:any;
+  onCheckboxChange(e:boolean, userId:any) {
+  
+  if(e === true){
+    console.log("true");
+    console.log(userId);
+    this.uId = userId;
+    this.count ++;
+  }
+  else if(e === false){
+    this.count --;
+  }
+  console.log(this.count);
+  if(this.count > 1){
+    document.getElementById('bottomBtnDiv').style.display="none";
+  }
+  else if(this.count === 1){
+    document.getElementById('bottomBtnDiv').style.display="block";
+  }
+  else{
+    document.getElementById('bottomBtnDiv').style.display="none";
+  }
+}
 }
