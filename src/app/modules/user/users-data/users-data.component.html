@@ -19,12 +19,12 @@
                     <table class="table">
                         <thead class="text-primary">
                             <tr>
+                                <th>Select</th>
                                 <th>Firstname</th>
-                                <th>Email id</th>
+                                <th>Email Id</th>
                                 <th>Username</th>
                                 <th>Role</th>
                                 <th>Action</th>
-                                <th>Installation</th>
                             </tr>
                         </thead>
                         
@@ -32,20 +32,33 @@
                             <tr *ngFor="let data of userData | paginate:{id:'listing_pagination',
                             itemsPerPage: 10,currentPage : page,
                             totalRecords : totalRecords} | filter:searchUser">
-
+                            <!-- <td> <section>
+                                    <mat-checkbox [checked]="checked" (change)="toggle($event)"></mat-checkbox>
+                                 </section> </td> -->
+                                <td><mat-checkbox (change)="getUserInfo(data)"></mat-checkbox></td>
+                                <!-- [disabled]="true" -->
                                 <td>{{data.firstname}}</td>
                                 <td>{{data.email}}</td>
                                 <td>{{data.username}}</td>
                                 <td class="text-primary">{{data.role}}</td>
                                 <!-- <td><button mat-icon-button data-toggle="modal" data-target="#formModal"><i class="material-icons" (click)="getUserInfo(data)">edit</i></button></td> -->
                                 <td><button mat-icon-button><i class="material-icons icon-btn" [matMenuTriggerFor]="userMenu" >edit</i></button></td>
-                                <td style="text-align: center;"><button mat-icon-button ><i class="material-icons icon-btn">add_circle</i></button></td>
+                                <!-- <td style="text-align: center;"><button mat-icon-button ><i class="material-icons icon-btn">add_circle</i></button></td> -->
                                 <mat-menu #userMenu="matMenu">
+                                    <button mat-menu-item data-toggle="modal" data-target="#macIdModel"  >Add Installation</button>
+                                    <button mat-menu-item data-toggle="modal" data-target="#installationForm"  >Installation from</button>
                                     <button mat-menu-item data-toggle="modal" data-target="#formModal" (click)="getUserInfo(data)">Update</button>
                                     <button mat-menu-item (click)="deleteUser(data)" >Delete</button>
+                                    
                                 </mat-menu>
                               </tr>
                         </tbody>
+                        <div class="row">
+                            <button mat-icon-button id="myBtn" color="#006598"><i class="material-icons icon-btn">add_circle</i>New Installation</button>
+                            <!-- <button mat-icon-button id="myBtn" color="#006598"><i class="material-icons icon-btn">remove_circle</i>Deactivate User</button> -->
+                        </div>
+                            
+                        
                     </table>
                     
                     <div>
@@ -135,6 +148,157 @@
                         <button type="button" mat-button data-dismiss="modal">Close</button>
                         <button mat-button >{{btnAction}}</button>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="macIdModel" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+                <!-- <h3 class="modal-title" id="exampleModalLongTitle">Modal title</h3> -->
+                <!-- <p>Node ID</p> -->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <form [formGroup]="macIdForm" (ngSubmit)="macIdFormSubmit(macIdForm.value)">
+              <div class="modal-body">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Mac Id</mat-label>
+                    <input matInput type="text" formControlName="macId">
+                </mat-form-field>
+                <!-- <span>Master-Id: </span><p>{{masterId}}</p><br>
+                <span>EndpointId :</span>
+                <p *ngFor="let id of endPointId">{{id.endpointId}} </p> -->
+              </div>
+              <div class="modal-footer">
+                <button mat-button>Next</button>
+              </div>
+            </form>
+          </div>
+          
+        </div>
+    </div>
+    
+    <div class="modal fade" id="installationForm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Installation detail
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="installationForm" (ngSubmit)="installationFormSubmit(installationForm.value)">
+                <div class="modal-body">
+                    <!-- <p *ngFor="let id of endPointId">{{id.endpointId}} </p> -->
+                    <p>{{masterId}}</p>
+                    <!-- <p *ngIf="endPointId!=undefined && endPointId!=null" >{{endPointId[1].endpointId}} </p> -->
+                    <!-- <input type="text" *ngIf="endPointId!=undefined && endPointId!=null" value="{{endPointId[1].endpointId}}" > -->
+
+                    <mat-form-field style="width: 100%;">
+                        <input matInput placeholder="Installation Name" formControlName="installationName">
+                    </mat-form-field>
+                    <mat-form-field style="width: 100%;">
+                        <input matInput placeholder="Room Name" formControlName="roomName">
+                    </mat-form-field>   
+                    <div class="row">
+                        <mat-form-field style="width: 100%;">
+                            <input matInput placeholder="End Point Id 1" formControlName="endPointId1" value="{{endPointId1}}">
+                        </mat-form-field>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input matInput placeholder="End-Point 1" formControlName="endPoint1">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6" id="">
+                            <mat-form-field style="width: 100%;">
+                                <mat-label>Type</mat-label>
+                                <select matNativeControl formControlName="type1" value="">
+                                    <option value="" disabled selected></option>
+                                    <option value="Switch">Switch</option>
+                                    <option value="Dimmer">Dimmer</option>
+                                    <option value="Dissable">Dissable</option>
+                                </select>
+                            </mat-form-field>
+                        </div>
+                      
+                    </div>
+
+                    <div class="row">
+                        <mat-form-field style="width: 100%;">
+                            <input matInput placeholder="End-Point Id 2" formControlName="endPointId2" value="{{endPointId2}}">
+                        </mat-form-field>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input matInput placeholder="End-Point 2" formControlName="endPoint2">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6" id="">
+                            <mat-form-field style="width: 100%;">
+                                <mat-label>Type</mat-label>
+                                <select matNativeControl formControlName="type2" value="">
+                                    <option value="" disabled selected></option>
+                                    <option value="Switch">Switch</option>
+                                    <option value="Dimmer">Dimmer</option>
+                                    <option value="Dissable">Dissable</option>
+                                </select>
+                            </mat-form-field>
+                        </div>
+                      
+                    </div>
+
+                    <div class="row">
+                        <mat-form-field style="width: 100%;">
+                            <input matInput placeholder="End-Point Id 3" formControlName="endPointId2" value="{{endPointId3}}">
+                        </mat-form-field>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input matInput placeholder="End-Point 3" formControlName="endPoint3">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6" id="">
+                            <mat-form-field style="width: 100%;">
+                                <mat-label>Type</mat-label>
+                                <select matNativeControl formControlName="type3" value="">
+                                    <option value="" disabled selected></option>
+                                    <option value="Switch">Switch</option>
+                                    <option value="Dimmer">Dimmer</option>
+                                    <option value="Dissable">Dissable</option>
+                                </select>
+                            </mat-form-field>
+                        </div>
+                      
+                    </div>
+
+                    <div class="row">
+                        <mat-form-field style="width: 100%;">
+                            <input matInput placeholder="End-Point Id 4" formControlName="endPointId4" value="{{endPointId4}}">
+                        </mat-form-field>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input matInput placeholder="End-Point 4" formControlName="endPoint4">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6" id="">
+                            <mat-form-field style="width: 100%;">
+                                <mat-label>Type</mat-label>
+                                <select matNativeControl formControlName="type4" value="">
+                                    <option value="" disabled selected></option>
+                                    <option value="Switch">Switch</option>
+                                    <option value="Dimmer">Dimmer</option>
+                                    <option value="Dissable">Dissable</option>
+                                </select>
+                            </mat-form-field>
+                        </div>
+                      
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button mat-button>Submit</button>
+                </div>
                 </form>
             </div>
         </div>

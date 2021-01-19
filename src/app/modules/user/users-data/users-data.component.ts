@@ -5,6 +5,10 @@ import { User } from '../../../models/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertService } from 'src/app/services/alert.service';
 import Swal from 'sweetalert2';
+import { from } from 'rxjs';
+import { Node } from '../../../models/node';
+import { NodeService } from 'src/app/services/node.service';
+
 @Component({
   selector: 'app-users-data',
   templateUrl: './users-data.component.html',
@@ -27,19 +31,34 @@ export class UsersDataComponent implements OnInit {
   userForm: FormGroup;
   submitted = false;
   loading = false;
+  showMacIdModel = false;
   btnAction: string;
   userId: string;
 
   /** for form field */
   fName:string; lName:string; uName:string; emailId:string; mno:string; addr:string; role:string;
 
+  checked = false;
+
+  /** Node Form */
+  macIdForm:FormGroup;
+  masterId : any;
+  endPointId1 : any;
+  endPointId2 : any;
+  endPointId3 : any;
+  endPointId4 : any;
+
+  /**Installation Form */
+  installationForm:FormGroup;
 
   constructor(private userService: UserService,
+              private nodeService: NodeService,
               private formBuilder: FormBuilder, 
               private alertService: AlertService) { }
 
   ngOnInit(): void {
-  
+    // this.getEndpoingId("MS_b48b3634-fd49-43d2-a7a2-cfa27efd1520");
+
     this.loadAllUsers();
     document.getElementById('userId').style.display="block";
 
@@ -55,6 +74,24 @@ export class UsersDataComponent implements OnInit {
       userId: ['', ]//Validators.required
     })
 
+    this.macIdForm = this.formBuilder.group({
+      macId: ['',Validators.required]
+    })
+
+    this.installationForm = this.formBuilder.group({
+      endpointId:[''],
+      installationName: ['', Validators.required],
+      roomName: ['', Validators.required],
+      endPointId1:['',Validators.required], endPoint1:['',Validators.required],
+      type1:['', Validators.required],
+      endPointId2:['',Validators.required], endPoint2:['',Validators.required],
+      type2:['', Validators.required],
+      endPointId3:['',Validators.required], endPoint3:['',Validators.required],
+      type3:['', Validators.required],
+      endPointId4:['',Validators.required], endPoint4:['',Validators.required],
+      type4:['', Validators.required]
+    })
+
   }
 
   private loadAllUsers(){
@@ -67,6 +104,7 @@ export class UsersDataComponent implements OnInit {
   }
 
   getUserInfo(data){
+    console.log(data);
     
     if(data === 'addUser')
     {
@@ -111,7 +149,8 @@ export class UsersDataComponent implements OnInit {
     
     this.userService.addUser(data).pipe(first())
             .subscribe(data => {
-              this.alertService.success('User Added', true);
+              // this.alertService.success('User Added', true);
+              Swal.fire('User Added!', 'Successfull', 'success');
               this.userForm.reset();
               this.loadAllUsers();
               setTimeout(() => {
@@ -119,7 +158,8 @@ export class UsersDataComponent implements OnInit {
               }, 2000);
               },
               error => {
-                this.alertService.error('something went wrong please try again', true);
+                // this.alertService.error('something went wrong please try again', true);
+                Swal.fire('Error', 'something went wrong please try again', 'error');
                 this.loading = false;
               }
             )
@@ -132,7 +172,8 @@ export class UsersDataComponent implements OnInit {
       
       this.userService.updateUser(data).pipe(first()).subscribe(data => {
         console.log(data);
-        this.alertService.success('User updated successfull', true)
+        // this.alertService.success('User updated successfull', true)
+        Swal.fire('User Update!', 'Successfull', 'success');
         this.loadAllUsers();
         setTimeout(() => {
           this.alertService.clear();
@@ -140,9 +181,9 @@ export class UsersDataComponent implements OnInit {
 
       },
       error =>{
-          this.alertService.error('something went wrong please try again', true);
+          // this.alertService.error('something went wrong please try again', true);
+          Swal.fire('User Update!', 'something went wrong please try again!', 'warning');
           this.loading = false;
-          
         }
       )
     }
@@ -158,7 +199,63 @@ export class UsersDataComponent implements OnInit {
           alert("User deleted");
         });
       }
-      
-    
   }
+
+  macIdFormSubmit(data){
+    this.submitted =true;
+    console.log(data.macId);
+    
+    if(this.macIdForm.invalid){
+      return
+    }
+    this.loading = true;
+    
+    this.nodeService.getMasterId(data.macId).pipe(first()).subscribe(masterIds => {
+      
+      let invalidIds = masterIds[1]["invalid_node_list"];
+
+      if (invalidIds.length > 0 ) {
+        Swal.fire('Wrong!', 'Mac-Id ', 'error');
+     // this.alertService.error('something went wrong please try again', true)
+      } else {
+        // console.log(masterIds[0]["masterIds"][0]["masterId"]);
+        this.masterId = masterIds[0]["masterIds"][0]["masterId"];
+        console.warn(this.masterId);
+        return this.nodeService.getEndpointId(this.masterId).pipe(first()).subscribe(endPointId => {
+          // console.log(endPointId["result"][0]["endpointId"]);
+          // this.endPointId = endPointId["result"]
+          this.endPointId1 = endPointId["result"][0]["endpointId"]
+          this.endPointId2 = endPointId["result"][1]["endpointId"]
+          this.endPointId3 = endPointId["result"][2]["endpointId"]
+          this.endPointId4 = endPointId["result"][3]["endpointId"]
+          // console.log(endPointId["result"][0]["endpointId"]);
+          // console.log(endPointId["result"][1]["endpointId"]);
+          // console.log(endPointId["result"][2]["endpointId"]);
+          // console.log(endPointId["result"][3]["endpointId"]);
+        })
+      }
+    },error => {
+        this.loading = false;
+      })
+  } 
+
+  installationFormSubmit(data){
+    this.submitted =true;
+    
+    if(this.installationForm.invalid){
+      return
+    }
+
+    this.loading = true;
+    console.log(data);
+    this.nodeService.submitInstallationInfo(data).pipe(first())
+    .subscribe(response => {
+      console.log(response);
+      
+    },
+    error => {
+      this.loading = false;
+    })
+  }
+
 }
