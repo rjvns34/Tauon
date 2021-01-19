@@ -242,6 +242,8 @@ export class UsersDataComponent implements OnInit {
   } 
 
   installationFormSubmit(data){
+    console.log("installationFormSubmit" +this.uId + this.masterId + this.endPointId1 + this.endPointId2 + this.endPointId3 + this.endPointId4);
+    
     this.submitted =true;
     console.log(data);
     
@@ -250,8 +252,8 @@ export class UsersDataComponent implements OnInit {
     }
 
     this.loading = true;
-    console.log(data);
-    this.nodeService.submitInstallationInfo(data).pipe(first())
+    // console.log(data);
+    this.nodeService.submitInstallationInfo(data,this.uId, this.masterId , this.endPointId1 , this.endPointId2 , this.endPointId3 , this.endPointId4).pipe(first())
     .subscribe(response => {
       console.log(response);
       

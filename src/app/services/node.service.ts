@@ -40,18 +40,20 @@ export class NodeService {
     }))
   }
 
-  submitInstallationInfo(data){
+  submitInstallationInfo(data,uId,masterId,endPointId1,endPointId2,endPointId3,endPointId4){
+    // console.log(uId + masterId +);
+    console.log(uId + masterId + endPointId1 + endPointId2 + endPointId3 + endPointId4);
     
-    
+    // this.uId + this.masterId + this.endPointId1 + this.endPointId2 + this.endPointId3 + this.endPointId4
     const headers = {'Authorization':RequiredData.authorization}
-    const body = { "userid": data.userId, "masternodeId": data.masterId, "ssid": "Tauon",
+    const body = { "userid": uId, "masternodeId": masterId, "ssid": "Tauon",
                    "ipAddress": "192.168.1.135", "installationTitle": data.installationName, "installationIcon": 60223,
                    "roomTitle": data.roomName, "roomIcon": 60227, 
                    "endpoints": [
-                     {"endpointId": data.endPointId1, "endpointTitle": data.endPoint1, "endpointIcon": 58162, "endpointType": data.type1, "endpointStatus": 0},
-                     {"endpointId": data.endPointId2, "endpointTitle": data.endPoint2, "endpointIcon": 58162, "endpointType": data.type2, "endpointStatus": 0},
-                     {"endpointId": data.endPointId3, "endpointTitle": data.endPoint3, "endpointIcon": 58162, "endpointType": data.type2, "endpointStatus": 0},
-                     {"endpointId": data.endPointId4, "endpointTitle": data.endPoint4, "endpointIcon": 58162, "endpointType": data.type2, "endpointStatus": 0}
+                     {"endpointId": endPointId1, "endpointTitle": data.endPoint1, "endpointIcon": 58162, "endpointType": data.type1, "endpointStatus": 0},
+                     {"endpointId": endPointId2, "endpointTitle": data.endPoint2, "endpointIcon": 58162, "endpointType": data.type2, "endpointStatus": 0},
+                     {"endpointId": endPointId3, "endpointTitle": data.endPoint3, "endpointIcon": 58162, "endpointType": data.type2, "endpointStatus": 0},
+                     {"endpointId": endPointId4, "endpointTitle": data.endPoint4, "endpointIcon": 58162, "endpointType": data.type2, "endpointStatus": 0}
                    ] }
                    
       console.log("data @ service "+body);
