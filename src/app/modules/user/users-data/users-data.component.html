@@ -154,12 +154,15 @@
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <form [formGroup]="macIdForm" (ngSubmit)="macIdFormSubmit(macIdForm.value)">
+              <form [formGroup]="macIdForm" (ngSubmit)="macIdFormSubmit()">
               <div class="modal-body">
                 <mat-form-field style="width: 100%;">
                     <mat-label>Mac Id</mat-label>
                     <input matInput type="text" formControlName="macId">
                 </mat-form-field>
+                <div *ngIf="submitted && mf.macId.errors" style="color: red;" role="alert">
+                    <div *ngIf="mf.macId.errors.required">Mac id is required</div>
+                </div>
                 <!-- <span>Master-Id: </span><p>{{masterId}}</p><br>
                 <span>EndpointId :</span>
                 <p *ngFor="let id of endPointId">{{id.endpointId}} </p> -->
@@ -184,20 +187,11 @@
                 </div>
                 <form [formGroup]="installationForm" (ngSubmit)="installationFormSubmit(installationForm.value)">
                 <div class="modal-body">
-                    <!-- <p *ngFor="let id of endPointId">{{id.endpointId}} </p> -->
-                    <!-- <p>{{masterId}}</p> -->
-                    <!-- <mat-form-field style="width: 100%;">
-                        <input matInput formControlName="userId" value="{{uId}}">
-                    </mat-form-field> -->
-                    <!-- <mat-form-field style="width: 100%;">
-                        <input matInput formControlName="masterId" value="{{masterId}}">
-                    </mat-form-field> -->
-                    <!-- <p *ngIf="endPointId!=undefined && endPointId!=null" >{{endPointId[1].endpointId}} </p> -->
-                    <!-- <input type="text" *ngIf="endPointId!=undefined && endPointId!=null" value="{{endPointId[1].endpointId}}" > -->
-
+                    
                     <mat-form-field style="width: 100%;">
                         <input matInput placeholder="Installation Name" formControlName="installationName">
                     </mat-form-field>
+                    
                     <mat-form-field style="width: 100%;">
                         <input matInput placeholder="Room Name" formControlName="roomName">
                     </mat-form-field>   

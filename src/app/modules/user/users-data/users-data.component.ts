@@ -101,12 +101,12 @@ export class UsersDataComponent implements OnInit {
     .subscribe(users => {
       this.userData = users["result"];
       // this.totalRecords = users;
-      console.log(users)
+      // console.log(users)
     });
   }
 
   getUserInfo(data){
-    console.log(data);
+    // console.log(data);
     
     if(data === 'addUser')
     {
@@ -146,8 +146,8 @@ export class UsersDataComponent implements OnInit {
     }
     
     if(this.btnAction === 'Submit'){
-    console.log('Submit');    
-    console.log(data);
+    // console.log('Submit');    
+    // console.log(data);
     
     this.userService.addUser(data).pipe(first())
             .subscribe(data => {
@@ -169,11 +169,11 @@ export class UsersDataComponent implements OnInit {
 
     if(this.btnAction === 'Update'){
 
-      console.log('update');
-      console.log(data);
+      // console.log('update');
+      // console.log(data);
       
       this.userService.updateUser(data).pipe(first()).subscribe(data => {
-        console.log(data);
+        // console.log(data);
         // this.alertService.success('User updated successfull', true)
         Swal.fire('User Update!', 'Successfull', 'success');
         $("#formModal").modal('hide');
@@ -196,7 +196,7 @@ export class UsersDataComponent implements OnInit {
   deleteUser(data){
    
       if(confirm("Are you sure to delete: "+data.username)) {
-        console.log(data.userId);
+        // console.log(data.userId);
         this.userService.deleteUser(data.userId).pipe(first()).subscribe(() => {
           this.loadAllUsers();
           alert("User deleted");
@@ -204,17 +204,15 @@ export class UsersDataComponent implements OnInit {
         });
       }
   }
-
-  macIdFormSubmit(data){
+  get mf(){return this.macIdForm.controls; }
+  macIdFormSubmit(){
     this.submitted =true;
-    console.log(data.macId);
+    // console.log(this.mf.macId);
     
-    if(this.macIdForm.invalid){
-      return
-    }
-    this.loading = true;
+    if(this.macIdForm.valid){
+      this.loading = true;
     
-    this.nodeService.getMasterId(data.macId).pipe(first()).subscribe(masterIds => {
+    this.nodeService.getMasterId(this.mf.macId.value).pipe(first()).subscribe(masterIds => {
       
       let invalidIds = masterIds[1]["invalid_node_list"];
 
@@ -224,7 +222,7 @@ export class UsersDataComponent implements OnInit {
       } else {
         // console.log(masterIds[0]["masterIds"][0]["masterId"]);
         this.masterId = masterIds[0]["masterIds"][0]["masterId"];
-        console.warn(this.masterId);
+        // console.warn(this.masterId);
         return this.nodeService.getEndpointId(this.masterId).pipe(first()).subscribe(endPointId => {
           // console.log(endPointId["result"][0]["endpointId"]);
           // this.endPointId = endPointId["result"]
@@ -239,28 +237,45 @@ export class UsersDataComponent implements OnInit {
     },error => {
         this.loading = false;
       })
+    }
+    
   } 
-
+  // get if(){return this.installationForm.controls}
   installationFormSubmit(data){
-    console.log("installationFormSubmit" +this.uId + this.masterId + this.endPointId1 + this.endPointId2 + this.endPointId3 + this.endPointId4);
+    // console.log("installationFormSubmit" +this.uId + this.masterId + this.endPointId1 + this.endPointId2 + this.endPointId3 + this.endPointId4);
     
     this.submitted =true;
-    console.log(data);
+    // console.log(this.installationForm.valid);
+    // console.log(data);
     
-    if(this.installationForm.invalid){
-      return
-    }
-
-    this.loading = true;
+    
+    if(this.installationForm.valid){
+      this.loading = true;
     // console.log(data);
     this.nodeService.submitInstallationInfo(data,this.uId, this.masterId , this.endPointId1 , this.endPointId2 , this.endPointId3 , this.endPointId4).pipe(first())
     .subscribe(response => {
-      console.log(response);
+      // console.log(response["result"]);
       
+      if(response["result"] === "duplicate master id"){
+        Swal.fire('Already installed', 'This node is Already installed', 'error');
+      }
+      else{
+        Swal.fire('Installation', 'Successfull', 'success');
+        this.macIdForm.reset();
+        this.installationForm.reset();
+  
+        $("#installationForm").modal('hide');
+        $("#macIdModel").modal('hide');
+      }
     },
     error => {
       this.loading = false;
+      // console.log(error);
+      
     })
+    }
+
+    
   }
 
   count = 0;
@@ -268,19 +283,19 @@ export class UsersDataComponent implements OnInit {
   onCheckboxChange(e:boolean, userId:any) {
   
   if(e === true){
-    console.log("true");
-    console.log(userId);
+    // console.log("true");
+    // console.log(userId);
     this.uId = userId;
     this.count ++;
   }
   else if(e === false){
     this.count --;
   }
-  console.log(this.count);
-  if(this.count > 1){
-    document.getElementById('bottomBtnDiv').style.display="none";
-  }
-  else if(this.count === 1){
+  // console.log(this.count);
+  // if(this.count > 1){
+  //   document.getElementById('bottomBtnDiv').style.display="none";
+  // }
+  if(this.count === 1){
     document.getElementById('bottomBtnDiv').style.display="block";
   }
   else{
