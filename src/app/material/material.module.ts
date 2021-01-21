@@ -8,6 +8,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTabsModule } from '@angular/material/tabs';
 
 const Material = [
   MatFormFieldModule,
@@ -17,7 +18,8 @@ const Material = [
   NgxPaginationModule,
   Ng2SearchPipeModule,
   MatSelectModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatTabsModule
 ]
 
 @NgModule({

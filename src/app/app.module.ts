@@ -17,6 +17,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { HomeComponent } from './dashboard/home/home.component';
 import { UsersDataComponent } from './modules/user/users-data/users-data.component';
 import { AlertComponent } from './modules/alert/alert.component';
+import { UserTotalInfoComponent } from './modules/user/user-total-info/user-total-info.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { AlertComponent } from './modules/alert/alert.component';
     SidebarComponent,
     HomeComponent,
     UsersDataComponent,
-    AlertComponent
+    AlertComponent,
+    UserTotalInfoComponent
   ],
   imports: [
     BrowserModule,

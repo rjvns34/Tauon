@@ -33,7 +33,7 @@
                             itemsPerPage: 10,currentPage : page,
                             totalRecords : totalRecords} | filter:searchUser">
                             <td><mat-checkbox ngModel (ngModelChange)="onCheckboxChange($event,data.userId)"></mat-checkbox></td>
-                                <td>{{data.firstname}}</td>
+                                <td style="cursor: pointer;" (click)="totalInfo(data.userId)" >{{data.firstname}}</td>
                                 <td>{{data.email}}</td>
                                 <td>{{data.username}}</td>
                                 <td class="text-primary">{{data.role}}</td>

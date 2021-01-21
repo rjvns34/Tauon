@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { from } from 'rxjs';
 import { Node } from '../../../models/node';
 import { NodeService } from 'src/app/services/node.service';
+import { Router } from '@angular/router';
 declare var $: any;
 
 @Component({
@@ -55,7 +56,8 @@ export class UsersDataComponent implements OnInit {
   constructor(private userService: UserService,
               private nodeService: NodeService,
               private formBuilder: FormBuilder, 
-              private alertService: AlertService) { }
+              private alertService: AlertService,
+              private router: Router) { }
 
   ngOnInit(): void {
   
@@ -80,17 +82,17 @@ export class UsersDataComponent implements OnInit {
     })
 
     this.installationForm = this.formBuilder.group({
-      masterId:[], userId:[],
+      
       installationName: ['', Validators.required],
       roomName: ['', Validators.required],
       
-      endPointId1:[], endPoint1:['',Validators.required], type1:['', Validators.required],
+      endPoint1:['',Validators.required], type1:['', Validators.required],
       
-      endPointId2:[], endPoint2:['',Validators.required], type2:['', Validators.required],
+      endPoint2:['',Validators.required], type2:['', Validators.required],
       
-      endPointId3:[], endPoint3:['',Validators.required], type3:['', Validators.required],
+      endPoint3:['',Validators.required], type3:['', Validators.required],
       
-      endPointId4:[], endPoint4:['',Validators.required], type4:['', Validators.required],
+      endPoint4:['',Validators.required], type4:['', Validators.required],
     
     })
 
@@ -171,6 +173,7 @@ export class UsersDataComponent implements OnInit {
 
       // console.log('update');
       // console.log(data);
+      this.userId
       
       this.userService.updateUser(data).pipe(first()).subscribe(data => {
         // console.log(data);
@@ -301,5 +304,27 @@ export class UsersDataComponent implements OnInit {
   else{
     document.getElementById('bottomBtnDiv').style.display="none";
   }
+}
+
+totalInfo(userId){
+  // console.log(userId);
+  // window.location.href = "dashboard/userTotalInfo";
+  // window.location.assign("dashboard/userTotalInfo  ");
+  return this.userService.userTotalDetails(userId)
+  .pipe(first())
+  .subscribe(userData => {
+    // console.log(userData);
+    // console.log(userData["user_info"]);
+  
+    const installationInfo = userData["user_info"]
+    // console.log(installationInfo);
+    
+    if(installationInfo.length > 1){
+      this.router.navigateByUrl('/dashboard/userTotalInfo',{ state: userData }); //send data to user-total-info component
+    }
+    else{
+      Swal.fire('Error', 'Installation is not done yet', 'error');
+    } 
+  });
 }
 }

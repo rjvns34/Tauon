@@ -3,6 +3,7 @@ export class User{
         public created_by : string;
         public created_on : Date;
         public email : string;
+        public address : string;
         public password : string;
         public firstname : string;
         public lastname : string;
