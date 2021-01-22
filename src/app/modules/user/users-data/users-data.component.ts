@@ -53,6 +53,8 @@ export class UsersDataComponent implements OnInit {
   /**Installation Form */
   installationForm:FormGroup;
 
+  readonlyText =  true;
+
   constructor(private userService: UserService,
               private nodeService: NodeService,
               private formBuilder: FormBuilder, 
@@ -62,19 +64,20 @@ export class UsersDataComponent implements OnInit {
   ngOnInit(): void {
   
     this.loadAllUsers();
-    document.getElementById('userId').style.display="block";
+    // document.getElementById('userId').style.display="none";
     document.getElementById('bottomBtnDiv').style.display="none";
 
     this.userForm = this.formBuilder.group({
       firstname :['', Validators.required,Validators.minLength(2)],
       lastname: ['', Validators.required],
-      username: ['', Validators.required],
-      email: ['', Validators.required],
-      password: ['', ],//Validators.required
       mobile_no: ['', Validators.required],
       address: ['', Validators.required],
-      role: ['', ],//Validators.required
-      userId: ['', ]//Validators.required
+
+      username: ['', Validators.required],
+      email: ['', Validators.required],
+      password: ['', Validators.required],  
+      role: ['', Validators.required],
+      userId: ['', Validators.required]
     })
 
     this.macIdForm = this.formBuilder.group({
@@ -128,11 +131,12 @@ export class UsersDataComponent implements OnInit {
       this.modalTitle = 'Edit User'
       this.fName = data.firstname;
       this.lName = data.lastname;
+      this.addr = data.address;
+      this.mno = data.mobile_no;
+
       this.userId = data.userId;
       this.uName = data.username;
       this.emailId = data.email;
-      this.mno = data.mobile_no;
-      this.addr = data.address;
       this.role = data.role; 
     }
   }
