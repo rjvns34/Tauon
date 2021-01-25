@@ -27,12 +27,18 @@ export class UserService {
     }))
   }
 
-  updateUser(user: User){
-    console.log(user);
-    
+  updateUser(userId,emailId,firstname,lastname,mobile_no,address){
+   
+    const body={
+      "firstname":firstname,
+      "lastname":lastname,
+      "mobile_no":mobile_no,
+      "address":address,
+      "email":emailId
+    }    
     const headers = {'Authorization':RequiredData.authorization}
-    const updateUrl =RequiredData.baseUrl+'update/user/'+user.userId
-    return this.http.put(updateUrl, user, {headers}).pipe(map(data => {
+    const updateUrl =RequiredData.baseUrl+'update/user/'+userId
+    return this.http.put(updateUrl, body, {headers}).pipe(map(data => {
       console.log("Update");
     }))
   }

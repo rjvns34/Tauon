@@ -14,7 +14,7 @@
                         <input class="form-control" type="text" name="search" 
                         [(ngModel)]="searchUser" autocomplete="off" 
                         placeholder="Search here...">  
-                        <button mat-button (click)="getUserInfo('addUser')" data-toggle="modal" data-target="#formModal"><i class="material-icons">add</i> Add User</button>     
+                        <button mat-button (click)="getUserInfo('','addUser')" data-toggle="modal" data-target="#formModal"><i class="material-icons">add</i> Add User</button>     
                     </div>
                     <table class="table">
                         <thead class="text-primary">
@@ -39,7 +39,7 @@
                                 <td class="text-primary">{{data.role}}</td>
                                 <td><button mat-icon-button><i class="material-icons icon-btn" [matMenuTriggerFor]="userMenu" >edit</i></button></td>
                                 <mat-menu #userMenu="matMenu">
-                                    <button mat-menu-item data-toggle="modal" data-target="#formModal" (click)="getUserInfo(data)">Update</button>
+                                    <button mat-menu-item (click)="getUserInfo(data,'update')">Update</button>
                                     <button mat-menu-item (click)="deleteUser(data)" >Delete</button>
                                 </mat-menu>
                               </tr>
@@ -73,25 +73,25 @@
                             
                             <div class="col-md-4">
                                <mat-form-field>
-                                   <input matInput type="text" placeholder="Firstname" formControlName="firstname" value="{{fName}}">
+                                   <input matInput type="text" placeholder="Firstname" formControlName="firstname">
                                </mat-form-field>
 
-                               <div id="userId">
+                               <!-- <div id="userId">
                                 <mat-form-field>
                                   <input matInput type="text" placeholder="userId" formControlName="userId" value="{{userId}}" [readonly]=readonlyText>
                                 </mat-form-field>
-                              </div>
+                              </div> -->
                             </div>
 
                             <div class="col-md-4">
                                 <mat-form-field>
-                                    <input matInput type="text" placeholder="Lastname" formControlName="lastname" value="{{lName}}">
+                                    <input matInput type="text" placeholder="Lastname" formControlName="lastname">
                                 </mat-form-field>
                             </div>
 
                             <div class="col-md-4" id="uNameDiv">
                                 <mat-form-field>
-                                    <input  matInput type="text" placeholder="Username" formControlName="username" value="{{uName}}">
+                                    <input  matInput type="text" placeholder="Username" formControlName="username" >
                                 </mat-form-field>
                             </div>
                             
@@ -100,17 +100,17 @@
                         <div class="row">
                             <div class="col-md-4" id="emailDiv">
                                 <mat-form-field>
-                                    <input matInput type="text" placeholder="Email Id" formControlName="email" value="{{emailId}}">
+                                    <input matInput type="text" placeholder="Email Id" formControlName="email">
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4" id="passwordDiv">
                                 <mat-form-field>
-                                    <input matInput type="text" placeholder="Password" formControlName="password">
+                                    <input matInput type="password" placeholder="Password" formControlName="password">
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field>
-                                    <input matInput type="text" placeholder="Mobile No." formControlName="mobile_no" value="{{mno}}">
+                                    <input matInput type="text" placeholder="Mobile No." formControlName="mobile_no">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -118,13 +118,13 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput type="text" placeholder="Address" formControlName="address" value="{{addr}}">
+                                    <input matInput type="text" placeholder="Address" formControlName="address">
                                 </mat-form-field>
                             </div>
                             <div class="col-md-6" id="roleDiv">
                                 <mat-form-field style="width: 100%;">
                                     <mat-label>Role</mat-label>
-                                    <select matNativeControl formControlName="role" value="{{role}}">
+                                    <select matNativeControl formControlName="role" >
                                         <option value="" disabled selected></option>
                                         <option value="ADMIN">ADMIN</option>
                                         <option value="USER">USER</option>

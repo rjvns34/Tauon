@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AlertService } from 'src/app/services/alert.service';
 import Swal from 'sweetalert2';
 import { from } from 'rxjs';
@@ -53,8 +53,6 @@ export class UsersDataComponent implements OnInit {
   /**Installation Form */
   installationForm:FormGroup;
 
-  readonlyText =  true;
-
   constructor(private userService: UserService,
               private nodeService: NodeService,
               private formBuilder: FormBuilder, 
@@ -64,26 +62,20 @@ export class UsersDataComponent implements OnInit {
   ngOnInit(): void {
   
     this.loadAllUsers();
-    // document.getElementById('userId').style.display="none";
     document.getElementById('bottomBtnDiv').style.display="none";
 
+    /** Normal declaration of textboxes */
     this.userForm = this.formBuilder.group({
-      firstname :['', Validators.required,Validators.minLength(2)],
-      lastname: ['', Validators.required],
-      mobile_no: ['', Validators.required],
-      address: ['', Validators.required],
-
-      username: ['', Validators.required],
-      email: ['', Validators.required],
-      password: ['', Validators.required],  
-      role: ['', Validators.required],
-      userId: ['', Validators.required]
+      firstname :[''], lastname: [''], mobile_no: [''], address: [''], 
+      username: [''], email: [''], password: [''], role: ['']
     })
 
+    /**Validation for macId form */
     this.macIdForm = this.formBuilder.group({
       macId: ['',Validators.required]
     })
 
+    /** Validation for Installation form */
     this.installationForm = this.formBuilder.group({
       
       installationName: ['', Validators.required],
@@ -100,44 +92,77 @@ export class UsersDataComponent implements OnInit {
     })
 
   }
-
+  
+  /**  get all user's details*/
   private loadAllUsers(){
     this.userService.getAllUser().pipe(first())
     .subscribe(users => {
       this.userData = users["result"];
-      // this.totalRecords = users;
-      // console.log(users)
     });
   }
 
-  getUserInfo(data){
-    // console.log(data);
-    
-    if(data === 'addUser')
+  /** Add user and update user validation for form's text boxes */
+  getUserInfo(data,title){
+   
+    /** pass two var from button click  data and title data means table's paticular row and title means 
+     * what we want to do
+     */
+
+    if(title === 'addUser') //if title is addUser that's mean user want to a create new user.
     {
+      this.userForm.reset();
       document.getElementById('passwordDiv').style.display="block";
       document.getElementById('roleDiv').style.display="block";
-      this.userForm.reset();
       this.btnAction = 'Submit';
       this.modalTitle = 'Add user';
+      /**
+       * 
+       */
+      
+      this.userForm = this.formBuilder.group({
+        firstname : new FormControl('', [ Validators.required]),
+        lastname: new FormControl('', [ Validators.required]),
+        mobile_no: new FormControl('', [ Validators.required, Validators.pattern('/[0-9\+\-\ ]/')]),
+        address: new FormControl('', [ Validators.required]),
+        username: new FormControl('', [ Validators.required]),
+        email: new FormControl('', [ Validators.required, Validators.pattern('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}')]),
+        password: new FormControl('', [ Validators.required]),
+        role: new FormControl('', [ Validators.required]),
+      });
+      
     }
-    else{
-      // document.getElementById('passwordDiv').style.display="none";
-      // document.getElementById('roleDiv').style.display="none";
-      // document.getElementById('emailDiv').style.display="none";
-      // document.getElementById('uNameDiv').style.display="pointer-events: none;";
+    if(title === 'update')//if title is updated that's mean user want to a update existing user.
+    {
+      document.getElementById('passwordDiv').style.display="none";
+      document.getElementById('roleDiv').style.display="none";      
       
       this.btnAction = 'Update';
       this.modalTitle = 'Edit User'
+      
       this.fName = data.firstname;
       this.lName = data.lastname;
       this.addr = data.address;
       this.mno = data.mobile_no;
-
       this.userId = data.userId;
       this.uName = data.username;
       this.emailId = data.email;
       this.role = data.role; 
+      $('#formModal').modal('show');
+       
+      /** Insert all the user values in the textbox and 
+       * disable some text boxes that will not be updated
+      */
+      
+       this.userForm = this.formBuilder.group({
+        firstname : new FormControl({value:this.fName, disabled:false}),
+        lastname: new FormControl({value:this.lName, disabled:false}),
+        mobile_no: new FormControl({value:this.mno, disabled:false}),
+        address: new FormControl({value:this.addr, disabled:false}),
+        username: new FormControl({value:this.uName, disabled: true}),
+        email: new FormControl({value:this.emailId, disabled:true}),
+        password: [],  
+        role: [],
+      });
     }
   }
 
@@ -152,18 +177,14 @@ export class UsersDataComponent implements OnInit {
     }
     
     if(this.btnAction === 'Submit'){
-    // console.log('Submit');    
-    // console.log(data);
-    
+          
     this.userService.addUser(data).pipe(first())
             .subscribe(data => {
               // this.alertService.success('User Added', true);
               Swal.fire('User Added!', 'Successfull', 'success');
               this.userForm.reset();
               this.loadAllUsers();
-              setTimeout(() => {
-                this.alertService.clear();
-              }, 2000);
+              $("#formModal").modal('hide');
               },
               error => {
                 // this.alertService.error('something went wrong please try again', true);
@@ -175,20 +196,22 @@ export class UsersDataComponent implements OnInit {
 
     if(this.btnAction === 'Update'){
 
-      // console.log('update');
-      // console.log(data);
-      this.userId
-      
-      this.userService.updateUser(data).pipe(first()).subscribe(data => {
-        // console.log(data);
-        // this.alertService.success('User updated successfull', true)
+      if(data.firstname === null || data.firstname=== ''){
+        data.firstname = this.fName
+      }
+      if(data.lastname === null || data.lastname=== ''){
+        data.lastname = this.lName
+      }
+      if(data.mobile_no === null || data.mobile_no=== ''){
+        data.mobile_no = this.mno
+      }
+      if(data.address === null || data.address=== ''){
+        data.address = this.addr
+      }
+      this.userService.updateUser(this.userId,this.emailId,data.firstname,data.lastname,data.mobile_no,data.address).pipe(first()).subscribe(data => {
         Swal.fire('User Update!', 'Successfull', 'success');
         $("#formModal").modal('hide');
         this.loadAllUsers();
-        // setTimeout(() => {
-        //   // this.alertService.clear();
-        // }, 2000);
-
       },
       error =>{
           // this.alertService.error('something went wrong please try again', true);
