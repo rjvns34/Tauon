@@ -116,13 +116,13 @@ export class UsersDataComponent implements OnInit {
       this.btnAction = 'Submit';
       this.modalTitle = 'Add user';
       /**
-       * 
+       * Validations for add new users 
        */
       
       this.userForm = this.formBuilder.group({
         firstname : new FormControl('', [ Validators.required]),
         lastname: new FormControl('', [ Validators.required]),
-        mobile_no: new FormControl('', [ Validators.required, Validators.pattern('/[0-9\+\-\ ]/')]),
+        mobile_no: new FormControl('', [ Validators.required, Validators.pattern('^((\\+91-?)|0)?[0-9]{10}$')]),
         address: new FormControl('', [ Validators.required]),
         username: new FormControl('', [ Validators.required]),
         email: new FormControl('', [ Validators.required, Validators.pattern('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}')]),
@@ -139,6 +139,7 @@ export class UsersDataComponent implements OnInit {
       this.btnAction = 'Update';
       this.modalTitle = 'Edit User'
       
+      /** value of paticular row is set in variables. */
       this.fName = data.firstname;
       this.lName = data.lastname;
       this.addr = data.address;
@@ -147,10 +148,11 @@ export class UsersDataComponent implements OnInit {
       this.uName = data.username;
       this.emailId = data.email;
       this.role = data.role; 
+
       $('#formModal').modal('show');
        
       /** Insert all the user values in the textbox and 
-       * disable some text boxes that will not be updated
+       * disable some text boxes that will not be updated.
       */
       
        this.userForm = this.formBuilder.group({
@@ -168,6 +170,7 @@ export class UsersDataComponent implements OnInit {
 
   get f(){return this.userForm.controls; }
 
+  /** function for adduser and update user details. */
   onSubmit(data){
     this.submitted = true;
 
@@ -176,26 +179,24 @@ export class UsersDataComponent implements OnInit {
       return
     }
     
-    if(this.btnAction === 'Submit'){
-          
+    if(this.btnAction === 'Submit')//this condition is used for add user details.
+    {      
     this.userService.addUser(data).pipe(first())
             .subscribe(data => {
-              // this.alertService.success('User Added', true);
               Swal.fire('User Added!', 'Successfull', 'success');
               this.userForm.reset();
               this.loadAllUsers();
               $("#formModal").modal('hide');
               },
               error => {
-                // this.alertService.error('something went wrong please try again', true);
                 Swal.fire('Error', 'something went wrong please try again', 'error');
                 this.loading = false;
               }
             )
     }
 
-    if(this.btnAction === 'Update'){
-
+    if(this.btnAction === 'Update')//this condition is used for update user details.
+    {
       if(data.firstname === null || data.firstname=== ''){
         data.firstname = this.fName
       }
@@ -214,7 +215,6 @@ export class UsersDataComponent implements OnInit {
         this.loadAllUsers();
       },
       error =>{
-          // this.alertService.error('something went wrong please try again', true);
           Swal.fire('User Update!', 'something went wrong please try again!', 'warning');
           this.loading = false;
         }
@@ -222,11 +222,10 @@ export class UsersDataComponent implements OnInit {
     }
     
   }
-
+/** function for delete user details. */
   deleteUser(data){
    
       if(confirm("Are you sure to delete: "+data.username)) {
-        // console.log(data.userId);
         this.userService.deleteUser(data.userId).pipe(first()).subscribe(() => {
           this.loadAllUsers();
           alert("User deleted");
@@ -234,7 +233,9 @@ export class UsersDataComponent implements OnInit {
         });
       }
   }
+  
   get mf(){return this.macIdForm.controls; }
+/** function for send macId and get masterId and also get endpointIds from masterId */
   macIdFormSubmit(){
     this.submitted =true;
     // console.log(this.mf.macId);
