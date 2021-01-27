@@ -62,6 +62,9 @@ export class UsersDataComponent implements OnInit {
   ngOnInit(): void {
   
     this.loadAllUsers();
+
+    this.getNodeDetails();
+    
     document.getElementById('bottomBtnDiv').style.display="none";
 
     /** Normal declaration of textboxes */
@@ -98,6 +101,8 @@ export class UsersDataComponent implements OnInit {
     this.userService.getAllUser().pipe(first())
     .subscribe(users => {
       this.userData = users["result"];
+      // console.log(this.userData);
+      
     });
   }
 
@@ -333,15 +338,13 @@ export class UsersDataComponent implements OnInit {
     document.getElementById('bottomBtnDiv').style.display="none";
   }
 }
-
+/** Get total details of users through userId. */
 totalInfo(userId){
-  // console.log(userId);
-  // window.location.href = "dashboard/userTotalInfo";
-  // window.location.assign("dashboard/userTotalInfo  ");
+
   return this.userService.userTotalDetails(userId)
   .pipe(first())
   .subscribe(userData => {
-    // console.log(userData);
+    console.log(userData);
     // console.log(userData["user_info"]);
   
     const installationInfo = userData["user_info"]
@@ -354,5 +357,12 @@ totalInfo(userId){
       Swal.fire('Error', 'Installation is not done yet', 'error');
     } 
   });
+}
+
+getNodeDetails(){
+  return this.nodeService.getNodeDetails().pipe(first()).subscribe(data =>{
+    console.log(data);
+    
+  })
 }
 }
