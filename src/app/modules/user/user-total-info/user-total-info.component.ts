@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { first } from 'rxjs/operators';
+import { Installation } from 'src/app/models/installation';
 import { User } from 'src/app/models/user';
 import { UserService } from '../../../services/user.service';
 
@@ -10,24 +13,32 @@ import { UserService } from '../../../services/user.service';
 })
 export class UserTotalInfoComponent implements OnInit {
   userData: User[] = [];
-  constructor( private router: Router) { }
+  userInfo;
+  users : Array<User>=[];
+  userId = localStorage.getItem('userIdForGetData');
 
-  ngOnInit(): void {
-    this.userData = history.state.user_info[1]["installations"] //get data from user-data-component L:323
+  // installationData: MatTableDataSource<Installation>
 
-    // this.router.getCurrentNavigation().extras.state
-    // console.log(history.state.user_info[1])
-    
-    // window.addEventListener("keyup", disableF5);
-    //  window.addEventListener("keydown", disableF5);
-    // console.log(this.userData);
-  //   function disableF5(e) {
-  //     if ((e.which || e.keyCode) == 116) e.preventDefault(); 
-  //     if ((e.which || e.keyCode) == 82) e.preventDefault(); 
-      
-  //     // evt.button == 2
-  //     // keycode == 82
-  //  };
+  constructor( private router: Router, private userService: UserService) { }
+
+  ngOnInit(): void {  
+    /**Call function when page load */
+    this.getUsersTotalInfo(this.userId);
   }
 
+
+  getUsersTotalInfo(userId){    
+    return this.userService.userTotalDetails(userId)
+    .pipe(first()).subscribe(data => {
+      console.log(data);
+      const installationDetails = data["user_info"][1]["installations"]
+      // console.log(data["user_info"][1]["installations"]);
+      this.userData = installationDetails;
+    })
+  }
+
+  onBack(){
+    localStorage.removeItem('userIdForGetData');
+    this.router.navigateByUrl('/dashboard/userInfo');
+  }
 }

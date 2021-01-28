@@ -9,7 +9,8 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
-
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 const Material = [
   MatFormFieldModule,
   MatInputModule,
@@ -19,7 +20,9 @@ const Material = [
   Ng2SearchPipeModule,
   MatSelectModule,
   MatCheckboxModule,
-  MatTabsModule
+  MatTabsModule,
+  MatTableModule,
+  MatSortModule
 ]
 
 @NgModule({

@@ -340,18 +340,17 @@ export class UsersDataComponent implements OnInit {
 }
 /** Get total details of users through userId. */
 totalInfo(userId){
+  localStorage.setItem('userIdForGetData', userId);
 
   return this.userService.userTotalDetails(userId)
   .pipe(first())
   .subscribe(userData => {
-    console.log(userData);
-    // console.log(userData["user_info"]);
-  
     const installationInfo = userData["user_info"]
-    // console.log(installationInfo);
     
     if(installationInfo.length > 1){
-      this.router.navigateByUrl('/dashboard/userTotalInfo',{ state: userData }); //send data to user-total-info component
+      
+      this.router.navigateByUrl('/dashboard/userTotalInfo'); //send data to user-total-info component
+      //,{ state: userData }
     }
     else{
       Swal.fire('Error', 'Installation is not done yet', 'error');

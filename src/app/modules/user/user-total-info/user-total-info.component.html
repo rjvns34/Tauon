@@ -7,25 +7,52 @@
                     <i class="material-icons">assignment</i>
                 </div>
                 <div class="card-content">
-                    <h4 class="card-title">User's Total Information</h4>
+                    <h4 class="card-title">User's information ({{userId}})</h4>
+                    <button mat-button (click)="onBack()">back</button>     
                 </div>
+                <!-- <a routerLink="/dashboard/userInfo">Back</a> -->
                 <mat-tab-group>
                     <mat-tab label="Installation">
-                        <table border="1">
-                            <thead>
-                                <tr>
-                                    <th>installationId</th>
-                                    <th>title</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let installationData of userData">
+                        <div class="table-responsive">
+                            <!-- <div class="search-box" style="display: flex;">
+                                <input class="form-control" type="text" name="search" 
+                                [(ngModel)]="searchUser" autocomplete="off" 
+                                placeholder="Search here...">  
+                                <button mat-button (click)="getUserInfo('','addUser')" data-toggle="modal" data-target="#formModal"><i class="material-icons">add</i> Add User</button>     
+                            </div> -->
+                            <table class="table">
+                                <thead class="text-primary">
+                                    <tr>
+                                        <th>InstallationId</th>
+                                        <th>Title</th>
+                                        <th>Status</th>
+                                        <th>Created_by</th>
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    <tr *ngFor="let installationData of userData">
                                     <td>{{installationData["installationId"]}}</td>
                                     <td>{{installationData["title"]}}</td>
+                                    <td>{{installationData["status"]}}</td>
+                                    <td>{{installationData["created_by"]}}</td>
                                 </tr>
-                            </tbody>
-                        </table>
+                                </tbody>  
+                            </table>
+                            
+                            <!-- <div>
+                                <pagination-controls id="listing_pagination" maxSize="5" directionLinks="true" (pageChange)="page = $event" style="text-align: end;"></pagination-controls>
+                            </div> -->
+                        </div>
+                        
+                        <!-- <table mat-table [dataSource]="installationData" matSort>
+                            <ng-container matColumnDef="InstallationID">
+                                <th mat-header-cell *matHeaderCellDef mat-mat-sort-header>InstallationID</th>
+                                <td mat-cell *matCellDef="let row">row.installationId</td>
+                            </ng-container>
+                        </table> -->
                     </mat-tab>
+                    <mat-tab label="Node">Node</mat-tab>
                     <mat-tab label="Service Request">Service Request Data</mat-tab>
                     <mat-tab label="Service">Service Data</mat-tab>
                 </mat-tab-group>

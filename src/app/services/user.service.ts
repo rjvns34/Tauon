@@ -3,6 +3,7 @@ import { User } from '../models/user';
 import { HttpClient } from '@angular/common/http';
 import { RequiredData } from '../helpers/requiredData';
 import { map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -50,9 +51,8 @@ export class UserService {
       
     })) 
   }
-  
+
   userTotalDetails(userId){
-    console.log(userId);
     const headers = {'Authorization':RequiredData.authorization}
     return this.http.get<User[]>(RequiredData.baseUrl+'get/userinfo/'+userId,{headers})
     .pipe(map(userData => {
