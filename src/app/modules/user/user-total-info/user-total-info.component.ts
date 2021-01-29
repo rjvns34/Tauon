@@ -12,12 +12,10 @@ import { UserService } from '../../../services/user.service';
   styleUrls: ['./user-total-info.component.css']
 })
 export class UserTotalInfoComponent implements OnInit {
-  userData: User[] = [];
-  userInfo;
-  users : Array<User>=[];
-  userId = localStorage.getItem('userIdForGetData');
+  installationDetails: Installation[] = [];
+  nodeDetails:Node[] = [];
 
-  // installationData: MatTableDataSource<Installation>
+  userId = localStorage.getItem('userIdForGetData');
 
   constructor( private router: Router, private userService: UserService) { }
 
@@ -30,10 +28,14 @@ export class UserTotalInfoComponent implements OnInit {
   getUsersTotalInfo(userId){    
     return this.userService.userTotalDetails(userId)
     .pipe(first()).subscribe(data => {
-      console.log(data);
-      const installationDetails = data["user_info"][1]["installations"]
+      // console.log(data);
+      const installationDetails = data["user_info"][1]["installations"];
+      const nodeDetails = data["user_info"][3]["nodes"]
+      // console.log(nodeDetails);
+      
       // console.log(data["user_info"][1]["installations"]);
-      this.userData = installationDetails;
+      this.installationDetails = installationDetails;
+      this.nodeDetails = nodeDetails;
     })
   }
 
