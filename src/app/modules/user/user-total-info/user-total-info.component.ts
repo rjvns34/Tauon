@@ -15,7 +15,7 @@ export class UserTotalInfoComponent implements OnInit {
   installationDetails: Installation[] = [];
   nodeDetails:Node[] = [];
 
-  userId = localStorage.getItem('userIdForGetData');
+  userId = localStorage.getItem('userIdForGetData'); //here we get the userId which is set at UsersDataComponent.
 
   constructor( private router: Router, private userService: UserService) { }
 
@@ -24,21 +24,20 @@ export class UserTotalInfoComponent implements OnInit {
     this.getUsersTotalInfo(this.userId);
   }
 
-
+/** Here we get the total info about paticular userId which store in session */
   getUsersTotalInfo(userId){    
     return this.userService.userTotalDetails(userId)
     .pipe(first()).subscribe(data => {
-      // console.log(data);
-      const installationDetails = data["user_info"][1]["installations"];
-      const nodeDetails = data["user_info"][3]["nodes"]
-      // console.log(nodeDetails);
       
-      // console.log(data["user_info"][1]["installations"]);
-      this.installationDetails = installationDetails;
+      const installationDetails = data["user_info"][1]["installations"]; //Installation Details.
+      const nodeDetails = data["user_info"][3]["nodes"] //Node details.
+      
+      this.installationDetails = installationDetails; 
       this.nodeDetails = nodeDetails;
     })
   }
 
+  /** This function is for remove session and redirect to the userInfo page on Back button click.*/
   onBack(){
     localStorage.removeItem('userIdForGetData');
     this.router.navigateByUrl('/dashboard/userInfo');

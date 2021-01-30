@@ -68,15 +68,12 @@ getNodeDetails(){
   // const id=""
   
   const body={
-    "userId": [
-      "US_da9bc02c-6ee3-4639-bb69-3a1dce314720",
-      "US_e79ee4b4-7257-4519-a47e-7ae232200d10",
-      "US_40816709-f54f-4d34-9f2d-07f4c4214087"
+    "masterId": [
+     "MS_6d26d63b-dfc2-4430-9a5c-618e86dd4e2e"
     ]
 }
-//aaa
 
-  return this.http.post("https://api.flexahub.com/v1/api/users/nodes",body)
+  return this.http.post("https://api.flexahub.com/v1/api/users/nodes/details",body)
   .pipe(map(data=>{
     // console.log(data);
     return data

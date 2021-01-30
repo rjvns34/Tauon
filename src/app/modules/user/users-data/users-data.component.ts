@@ -242,9 +242,7 @@ export class UsersDataComponent implements OnInit {
   get mf(){return this.macIdForm.controls; }
 /** function for send macId and get masterId and also get endpointIds from masterId */
   macIdFormSubmit(){
-    this.submitted =true;
-    // console.log(this.mf.macId);
-    
+    this.submitted =true;    
     if(this.macIdForm.valid){
       this.loading = true;
     
@@ -254,19 +252,15 @@ export class UsersDataComponent implements OnInit {
 
       if (invalidIds.length > 0 ) {
         Swal.fire('Wrong!', 'Mac-Id ', 'error');
-     // this.alertService.error('something went wrong please try again', true)
       } else {
-        // console.log(masterIds[0]["masterIds"][0]["masterId"]);
         this.masterId = masterIds[0]["masterIds"][0]["masterId"];
-        // console.warn(this.masterId);
         return this.nodeService.getEndpointId(this.masterId).pipe(first()).subscribe(endPointId => {
-          // console.log(endPointId["result"][0]["endpointId"]);
-          // this.endPointId = endPointId["result"]
+    
           this.endPointId1 = endPointId["result"][0]["endpointId"]
           this.endPointId2 = endPointId["result"][1]["endpointId"]
           this.endPointId3 = endPointId["result"][2]["endpointId"]
           this.endPointId4 = endPointId["result"][3]["endpointId"]
-          // this.macIdForm.reset();
+      
           $("#installationForm").modal('show');
         })
       }
@@ -276,21 +270,16 @@ export class UsersDataComponent implements OnInit {
     }
     
   } 
-  // get if(){return this.installationForm.controls}
+
+/** Function for send installation form data   */
   installationFormSubmit(data){
-    // console.log("installationFormSubmit" +this.uId + this.masterId + this.endPointId1 + this.endPointId2 + this.endPointId3 + this.endPointId4);
-    
     this.submitted =true;
-    // console.log(this.installationForm.valid);
-    // console.log(data);
-    
     
     if(this.installationForm.valid){
       this.loading = true;
-    // console.log(data);
+
     this.nodeService.submitInstallationInfo(data,this.uId, this.masterId , this.endPointId1 , this.endPointId2 , this.endPointId3 , this.endPointId4).pipe(first())
     .subscribe(response => {
-      // console.log(response["result"]);
       
       if(response["result"] === "duplicate master id"){
         Swal.fire('Already installed', 'This node is Already installed', 'error');
@@ -305,32 +294,25 @@ export class UsersDataComponent implements OnInit {
       }
     },
     error => {
-      this.loading = false;
-      // console.log(error);
-      
+      this.loading = false;      
     })
     }
 
     
   }
-
+/** Here we get the value of table checkbox with the userId.  */
   count = 0;
   uId:any;
   onCheckboxChange(e:boolean, userId:any) {
   
   if(e === true){
-    // console.log("true");
-    // console.log(userId);
     this.uId = userId;
     this.count ++;
-  }
-  else if(e === false){
-    this.count --;
-  }
-  // console.log(this.count);
-  // if(this.count > 1){
-  //   document.getElementById('bottomBtnDiv').style.display="none";
-  // }
+    }
+    else if(e === false){
+      this.count --;
+    }
+    //Here if checkbox checked more than one hide new installation button.
   if(this.count === 1){
     document.getElementById('bottomBtnDiv').style.display="block";
   }
@@ -338,19 +320,20 @@ export class UsersDataComponent implements OnInit {
     document.getElementById('bottomBtnDiv').style.display="none";
   }
 }
+
 /** Get total details of users through userId. */
 totalInfo(userId){
-  localStorage.setItem('userIdForGetData', userId);
+  localStorage.setItem('userIdForGetData', userId); //we set the userId in session.
 
   return this.userService.userTotalDetails(userId)
   .pipe(first())
   .subscribe(userData => {
-    const installationInfo = userData["user_info"]
+
+    const installationInfo = userData["user_info"] //only installation details will get here
     
-    if(installationInfo.length > 1){
-      
-      this.router.navigateByUrl('/dashboard/userTotalInfo'); //send data to user-total-info component
-      //,{ state: userData }
+    if(installationInfo.length > 1){ // if installation details is there then redirect to installation details page.
+
+      this.router.navigateByUrl('/dashboard/userTotalInfo');//we just redirect page.
     }
     else{
       Swal.fire('Error', 'Installation is not done yet', 'error');
@@ -361,7 +344,6 @@ totalInfo(userId){
 getNodeDetails(){
   return this.nodeService.getNodeDetails().pipe(first()).subscribe(data =>{
     console.log(data);
-    
   })
 }
 }
