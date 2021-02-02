@@ -18,6 +18,7 @@ import { HomeComponent } from './dashboard/home/home.component';
 import { UsersDataComponent } from './modules/user/users-data/users-data.component';
 import { AlertComponent } from './modules/alert/alert.component';
 import { UserTotalInfoComponent } from './modules/user/user-total-info/user-total-info.component';
+import { DatePipe } from '@angular/common';
 
 
 @NgModule({
@@ -43,7 +44,7 @@ import { UserTotalInfoComponent } from './modules/user/user-total-info/user-tota
     FormsModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

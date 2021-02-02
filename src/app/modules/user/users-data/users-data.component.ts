@@ -10,6 +10,7 @@ import { Node } from '../../../models/node';
 import { NodeService } from 'src/app/services/node.service';
 import { Router } from '@angular/router';
 declare var $: any;
+import { Chart } from 'node_modules/chart.js'
 
 @Component({
   selector: 'app-users-data',
@@ -52,6 +53,8 @@ export class UsersDataComponent implements OnInit {
 
   /**Installation Form */
   installationForm:FormGroup;
+
+  
 
   constructor(private userService: UserService,
               private nodeService: NodeService,
@@ -341,9 +344,56 @@ totalInfo(userId){
   });
 }
 
+nodeTimestamp: any[]=[];
+nodeTimestampStatus: any[]=[];
+
 getNodeDetails(){
-  return this.nodeService.getNodeDetails().pipe(first()).subscribe(data =>{
-    console.log(data);
-  })
+  // return this.nodeService.getNodeDetails().pipe(first()).subscribe(data =>{
+    // console.log(data["usersDetails"][0]["timeStamp"]);
+    // const timeStamp = data["usersDetails"][0]["timeStamp"];
+    
+    // for (var val of timeStamp) {
+    //   // console.log(val.status); 
+    //   this.nodeTimestamp.push(val.timestamp);
+    //   this.nodeTimestampStatus.push(val.status)
+    // }
+    // console.log(this.nodeTimestamp);
+    // console.log(this.nodeTimestampStatus);
+    
+  //   var nodeChart = new Chart("nodeChart", {
+  //     type: 'line',
+  //     data: {
+  //         labels: this.nodeTimestamp,
+  //         datasets: [{
+  //             label: 'Node Status Chart',
+  //             fill: false,
+  //             steppedLine: true,
+  //             // data: [1,2,3,4,5],
+  //             data: this.nodeTimestampStatus,
+  //             backgroundColor: [
+  //                 'rgba(255, 99, 132, 0.2)'
+  //             ],
+  //             borderColor: [
+  //                  'rgba(255, 99, 132, 1)'
+  //             ],
+  //             borderWidth: 2,
+              
+               
+            
+  //         }]
+  //     },
+  //     options: {
+  //         scales: {
+  //             xAxes: [{
+  //               type:'time',
+  //                 ticks: {
+  //                     beginAtZero: true
+  //                 }
+  //             }]
+  //         }
+  //     }
+  // });
+//   })
 }
+
 }

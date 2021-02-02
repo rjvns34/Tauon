@@ -51,7 +51,7 @@
                                 </tr>
                             </thead> 
                             <tbody>
-                                <tr *ngFor="let nodeData of nodeDetails">
+                                <tr *ngFor="let nodeData of nodeDetails" (click)="getNodeGraph(nodeData['masterId'])" style="cursor: pointer;">
                                     <td>{{nodeData["macId"]}}</td>
                                     <td>{{nodeData["ssid"]}}</td>
                                     <td>{{nodeData["hardwareVersion"]}}</td>
@@ -71,4 +71,27 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="nodeChartModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Node Status Chart</h4>
+            </div>
+            <div class="modal-body">
+                <div class="loader" id="chartLoader">
+                    <p style="margin-top: 30px;">Loading...</p>
+                    <svg class="circular" viewBox="25 25 50 50">
+                      <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+                    </svg>
+                  </div>
+                  <canvas id="nodeChart"></canvas>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
 </div>

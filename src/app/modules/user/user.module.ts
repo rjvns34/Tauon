@@ -7,7 +7,7 @@ import { UserComponent } from './user/user.component';
 import { MaterialModule } from '../../material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
-// import { UserTotalInfoComponent } from './user-total-info/user-total-info.component';
+
 
 @NgModule({
   declarations: [UserComponent, LoginComponent],
@@ -17,7 +17,8 @@ import { LoginComponent } from './login/login.component';
     ReactiveFormsModule,
     MaterialModule,
     FormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    
   ]
 })
 export class UserModule { }
