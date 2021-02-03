@@ -7,6 +7,7 @@ import { User } from 'src/app/models/user';
 import { NodeService } from 'src/app/services/node.service';
 import { UserService } from '../../../services/user.service';
 import { Chart } from 'node_modules/chart.js'
+// import { Chart } from 'chart.js';
 declare var $: any;
 import { DatePipe } from '@angular/common';
 
@@ -20,6 +21,8 @@ export class UserTotalInfoComponent implements OnInit {
   nodeDetails:Node[] = [];
 
   userId = localStorage.getItem('userIdForGetData'); //here we get the userId which is set at UsersDataComponent.
+
+
 
   constructor( private router: Router, private userService: UserService, 
                private nodeService: NodeService,
@@ -50,82 +53,94 @@ export class UserTotalInfoComponent implements OnInit {
     this.router.navigateByUrl('/dashboard/userInfo');
   }
 
-  nodeTimestamp: any[]=[];
+  
+  nodeTimestamp;
   nodeTimestampStatus: any[]=[];
-  
+  color=[]
+
   getNodeGraph(masterId){
-    const date = new Date();
-    const latest_date = this.datePipe.transform(date, 'yyyy-MM-dd hh:mm');
-  
-    const pd = date.setDate(date.getDate() - 2);
-    const previous_date = this.datePipe.transform(pd, 'yyyy-MM-dd 00:00');
-    
-    // console.log(latest_date );
-    // console.log(previous_date);
-    
-    // this.getDateDifference(latest_date,previous_date);
-    // this.nodeTimestampStatus.length = 0;
-    // this.nodeTimestampStatus.length = 0;
         
+ 
+
     $('#nodeChartModal').modal('show');
-    if(this.nodeTimestamp.length<1 || this.nodeTimestampStatus.length<1){
-      $('#chartLoader').show();
-    }
-    else{
-      $('#chartLoader').hide();
-    }
+    // if(this.nodeTimestamp.length<1 || this.nodeTimestampStatus.length<1){
+    //   $('#chartLoader').show();
+    // }
+    // else{
+    //   $('#chartLoader').hide();
+    // }
+
     return this.nodeService.getNodeDetails().pipe(first()).subscribe(data => {
       
       
       const timeStamp = data["usersDetails"][0]["timeStamp"];
-      // const timestampStatus = data["usersDetails"]
-      console.log(timeStamp);
-      // for (var val of timeStamp) {
-    
-      //   this.nodeTimestamp.push(val.timestamp);
-      //   this.nodeTimestampStatus.push(val.status)
-      // }
+      const timestampStatus = data["usersDetails"][0]["status"];
+      
       // console.log(timeStamp);
       
-      var nodeChart = new Chart("nodeChart", {
+      // for (var index in timestampStatus) {
+      //   if(timestampStatus[index] == "1"){
+      //     this.color.push('green')
+      //   }
+      //   else{
+      //     this.color.push('red')
+      //   }
+      // }
+
+        var lineChart = new Chart("nodeChart", {
         type: 'line',
         data: {
             labels: timeStamp,
             datasets: [{
                 label: 'Node Status Chart',
                 fill: false,
-                steppedLine: true,
-                data: [0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,1,0,1,0,1,0,1,0,1,1,1,1,1,1,0,0,0,0,1],
-                // data: this.nodeTimestampStatus,
-                backgroundColor:'rgba(0, 0, 0, 0.2)', 
-                // [
+                steppedLine: false,
+                data: timestampStatus,
+                
+                backgroundColor:'rgba(0, 0, 0, 0.2)',
+                //  [
                 //     'rgba(0, 0, 0, 0.2)'
                 // ],
-                borderColor:'rgba(0, 0, 0, 1)', 
-                // [
-                //      'rgba(0, 0, 0, 1)'
+                borderColor:'black',
+                //  [
+                //      'rgba(255, 99, 132, 1)',
+                //     'rgba(54, 162, 235, 1)',
+                //     'rgba(255, 206, 86, 1)',
+                //     'rgba(75, 192, 192, 1)',
+                //     'rgba(153, 102, 255, 1)',
+                //     'rgba(255, 159, 64, 1)',
+                //     'rgba(0, 0, 0, 1.0)'
                 // ],
-                borderWidth: 1,          
+                borderWidth: 2,
+                
             }]
         },
         options: {
+            responsive: true,
             scales: {
                 xAxes: [{
-                  type:'time',
+                    // type: 'time',
+                    // distribution: 'series',
                     ticks: {
-                      maxTicksLimit: 30,
-                      autoSkip: true,
+                        beginAtZero: true,
+                        max: '2021-02-02 16:29',
+                        
                     }
                 }],
                 yAxes: [{
                   ticks: {
-                    beginAtZero: true,          
-                    stepSize: 40
+                      beginAtZero: true,
+                      max: 1,
+                      min: 0,
+                      stepSize: 1.0,
+                      
                   }
-                }],
+              }]
             }
         }
     });
+
+    
     $('#chartLoader').hide();
         // this.nodeTimestampStatus.length = 0;
     // this.nodeTimestampStatus.length = 0; 
@@ -133,15 +148,4 @@ export class UserTotalInfoComponent implements OnInit {
     
   }
 
-  // getDateDifference(startDate, endDate){
-
-  //   console.log(startDate,endDate);
-  //   const dateArray = new Array();
-  //   const currentDate = startDate;
-    
-  //   while (currentDate <= endDate) {
-  //     dateArray.push(currentDate);
-      
-  //   }
-  // }
 }
